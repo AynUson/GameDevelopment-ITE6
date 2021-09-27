@@ -87,6 +87,7 @@ public class PlayerMove : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision){
         if(collision.gameObject.CompareTag(GROUND_TAG)){
             isGrounded = true;
+            Debug.Log("Ground Touched!");
         }
         if(collision.gameObject.CompareTag(ARROW_TAG)){
             Destroy(gameObject);
