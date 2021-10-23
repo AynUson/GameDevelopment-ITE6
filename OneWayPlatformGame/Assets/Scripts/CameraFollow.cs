@@ -22,6 +22,7 @@ public class CameraFollow : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         Debug.Log("Active Scene is '" + scene.name + "'.");
         scenename = scene.name;
+
     }
 
     // Update is called once per frame
@@ -45,7 +46,12 @@ public class CameraFollow : MonoBehaviour
             tempPos.x = maxX;
 
         if(scenename != "MainMenu")
+            
             minY += 0.5f * Time.deltaTime;
+            if(tempPos.y <  minY)
+                {
+                   //destroy player
+                }
         if(tempPos.y < minY)
         tempPos.y = minY;
 

@@ -13,9 +13,10 @@ public class PlayerMove : MonoBehaviour
     public Rigidbody2D myBody;
     public Animator anim;
     public string WALK_ANIMATION = "Walk";
+    public string JUMP_ANIMATION = "Jump";
     public string GROUND_TAG = "Ground";
     public string START_TAG = "Start";
-    
+    public string UPPLATFORM_TAG = "UpPlatform";
     private string ARROW_TAG = "ArrowTrap";
     public SpriteRenderer sr;
     public bool isGrounded; 
@@ -65,9 +66,11 @@ public class PlayerMove : MonoBehaviour
  
     void AnimatePlayer(){
         if(movementX > 0){
+            PlayerJump();
             anim.SetBool(WALK_ANIMATION, true);
             sr.flipX = false;
         }else if(movementX < 0){
+            PlayerJump();
             anim.SetBool(WALK_ANIMATION, true);
             sr.flipX = true;
         }
@@ -79,6 +82,14 @@ public class PlayerMove : MonoBehaviour
 
     void PlayerJump(){
         if(Input.GetButtonDown("Jump") && isGrounded){
+            anim.SetBool(JUMP_ANIMATION, true);
+            if(movementX > 0){
+                anim.SetBool(JUMP_ANIMATION, true);
+                sr.flipX = false;
+            }else if(movementX < 0){
+                anim.SetBool(JUMP_ANIMATION, true);
+                sr.flipX = true;
+            }
             isGrounded = false;
             myBody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
         }
@@ -87,9 +98,13 @@ public class PlayerMove : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision){
         if(collision.gameObject.CompareTag(GROUND_TAG)){
             isGrounded = true;
+            anim.SetBool(JUMP_ANIMATION, false);
             Debug.Log("Ground Touched!");
         }
         if(collision.gameObject.CompareTag(ARROW_TAG)){
+            Destroy(gameObject);
+        }
+        if(collision.gameObject.CompareTag(UPPLATFORM_TAG)){
             Destroy(gameObject);
         }
     }
