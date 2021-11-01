@@ -8,7 +8,9 @@ public class PlayerMove : MonoBehaviour
     
     public float moveForce = 10f;
     public float jumpForce = 11f;
-    
+    string scenename = "";
+    private Vector3 tempPos;
+    private Transform player;
     public float movementX;
     public Rigidbody2D myBody;
     public Animator anim;
@@ -16,10 +18,16 @@ public class PlayerMove : MonoBehaviour
     public string JUMP_ANIMATION = "Jump";
     public string GROUND_TAG = "Ground";
     public string START_TAG = "Start";
-    public string UPPLATFORM_TAG = "UpPlatform";
+    
+    public string FLOOD_TAG = "Flood";
+    // public string UPPLATFORM_TAG = "UpPlatform";
     private string ARROW_TAG = "ArrowTrap";
     public SpriteRenderer sr;
     public bool isGrounded; 
+
+    [SerializeField]
+    private float minY;
+
     private void Awake(){
         myBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -30,28 +38,43 @@ public class PlayerMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.FindWithTag("Player").transform;
+        Scene scene = SceneManager.GetActiveScene();
+        Debug.Log("Active Scene is '" + scene.name + "'.");
+        scenename = scene.name;
     }
 
     // Update is called once per frame
     void Update()
     {
+        
 
         Player1Movement();
         AnimatePlayer();
         PlayerJump();
         StartGame();
-        // float h = Input.GetAxis("Horizontal");
-        // float v = Input.GetAxis("Vertical");
-
-        // Vector2 pos= transform.position;
-
-        // pos.x += h * speed * Time.deltaTime;
-        // pos.y += v * speed * Time.deltaTime;
-
-        // transform.position = pos; 
+        
 
     }
+    // void LateUpdate(){
+
+    //     tempPos = transform.position;
+    //     tempPos.y = player.position.y;
+
+    //     if(scenename != "MainMenu")
+        
+    //         minY += 0.5f * Time.deltaTime;
+    //         if(tempPos.y <  minY)
+    //             {
+    //                Debug.Log("Dead");
+    //             }
+    //     if(tempPos.y < minY)
+    //     tempPos.y = minY;
+
+
+    //     transform.position = tempPos;
+    // }
+
 
     void FixedUpdate(){
         
@@ -104,9 +127,10 @@ public class PlayerMove : MonoBehaviour
         if(collision.gameObject.CompareTag(ARROW_TAG)){
             Destroy(gameObject);
         }
-        if(collision.gameObject.CompareTag(UPPLATFORM_TAG)){
-            Destroy(gameObject);
-        }
+          
+        // if(collision.gameObject.CompareTag(UPPLATFORM_TAG)){
+        //     Destroy(gameObject);
+        // }
     }
 
     private bool toStart = false;
@@ -121,7 +145,9 @@ public class PlayerMove : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision){
-        
+        if(collision.gameObject.CompareTag(FLOOD_TAG)){
+            Destroy(gameObject);
+        }
         if(collision.gameObject.CompareTag(START_TAG)){
             // Destroy(gameObject);
             toStart = true;

@@ -47,7 +47,7 @@ public class CameraFollow : MonoBehaviour
 
         if(scenename != "MainMenu")
             
-            minY += 0.5f * Time.deltaTime;
+            minY += 0.3f * Time.deltaTime;
             if(tempPos.y <  minY)
                 {
                    //destroy player
