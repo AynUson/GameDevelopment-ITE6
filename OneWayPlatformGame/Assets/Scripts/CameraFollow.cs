@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class CameraFollow : MonoBehaviour
     string scenename = "";
     private Transform player;
     private Vector3 tempPos;
-    
     [SerializeField]
     private float minX, maxX, minY, maxY;
 
@@ -57,6 +57,12 @@ public class CameraFollow : MonoBehaviour
 
         if(tempPos.y > maxY)
             tempPos.y = maxY;
+
+            
+
+        // End Question
+
+
 
         transform.position = tempPos;
     }
