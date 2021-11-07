@@ -122,7 +122,6 @@ public class PlayerMove : MonoBehaviour
         if(collision.gameObject.CompareTag(GROUND_TAG)){
             isGrounded = true;
             anim.SetBool(JUMP_ANIMATION, false);
-            Debug.Log("Ground Touched!");
         }
         if(collision.gameObject.CompareTag(ARROW_TAG)){
             Destroy(gameObject);
@@ -152,7 +151,6 @@ public class PlayerMove : MonoBehaviour
             // Destroy(gameObject);
             toStart = true;
             Debug.Log("Start");
-        
         }
     }
     private void OnTriggerExit2D(Collider2D collision){

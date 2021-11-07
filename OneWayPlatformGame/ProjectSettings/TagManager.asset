@@ -9,6 +9,10 @@ TagManager:
   - Start
   - Flood
   - QuestionOne
+  - Questions
+  - Q1A1
+  - Q1A2
+  - Q1A3
   layers:
   - Default
   - TransparentFX
