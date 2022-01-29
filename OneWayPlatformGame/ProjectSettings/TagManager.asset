@@ -13,6 +13,41 @@ TagManager:
   - Q1A1
   - Q1A2
   - Q1A3
+  - CondGround
+  - ground1
+  - ground2
+  - Q2A1
+  - Q2A2
+  - Q2A3
+  - CondGround2
+  - Q3A1
+  - Q3A2
+  - Q3A3
+  - CondGround3
+  - CondGround4
+  - Q4A1
+  - Q4A2
+  - Q4A3
+  - Result
+  - movingplatform
+  - Collector
+  - Q5A1
+  - Q5A2
+  - Q5A3
+  - Q6A1
+  - Q6A2
+  - Q6A3
+  - Q7A1
+  - Q7A2
+  - Q7A3
+  - Q8A1
+  - Q8A2
+  - Q8A3
+  - level1
+  - level2
+  - back
+  - levels
+  - credits
   layers:
   - Default
   - TransparentFX

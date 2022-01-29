@@ -25,6 +25,12 @@ public class PlayerMove : MonoBehaviour
     public SpriteRenderer sr;
     public bool isGrounded; 
 
+    public GameObject resultText;
+    public GameObject resultScore;
+    public GameObject LevelCompleteBG;
+    public GameObject Retry;
+    public GameObject Continue;
+
     [SerializeField]
     private float minY;
 
@@ -42,20 +48,46 @@ public class PlayerMove : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         Debug.Log("Active Scene is '" + scene.name + "'.");
         scenename = scene.name;
+        if(scenename != "LevelSelection"){
+            LevelCompleteBG.SetActive(false);
+            Close.SetActive(false);
+        }
+        
     }
 
+    private bool done = false;
+    float currentTime=0f;
+    float startingTime=0f;
+    int time = 0;
     // Update is called once per frame
     void Update()
     {
         
-
+        if(!done){
+                    currentTime +=1 * Time.deltaTime;
+                    time = (int)currentTime;
+                }
         Player1Movement();
         AnimatePlayer();
         PlayerJump();
         StartGame();
         
+        if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if(pauseToggle){
 
+                }
+                else{
+
+                }
+        
+                pauseToggle = !pauseToggle;
+            }
+
+       
     }
+    
+    bool pauseToggle = true;
     // void LateUpdate(){
 
     //     tempPos = transform.position;
@@ -74,7 +106,15 @@ public class PlayerMove : MonoBehaviour
 
     //     transform.position = tempPos;
     // }
+    public GameObject playerMove;
+    public GameObject Close;
 
+    void showLevelComp(){
+            playerMove.GetComponent<PlayerMove>().enabled = false;
+            Close.SetActive(true);
+            Retry.SetActive(true);
+            LevelCompleteBG.SetActive(true);
+        }
 
     void FixedUpdate(){
         
@@ -119,11 +159,26 @@ public class PlayerMove : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D collision){
-        if(collision.gameObject.CompareTag(GROUND_TAG)){
+        if(collision.gameObject.CompareTag(GROUND_TAG) || collision.gameObject.CompareTag("CondGround") 
+        || collision.gameObject.CompareTag("CondGround2")         || collision.gameObject.CompareTag("CondGround3")){
             isGrounded = true;
             anim.SetBool(JUMP_ANIMATION, false);
+            player.transform.parent=null;
+        
+        }
+        if(collision.gameObject.CompareTag("movingplatform") ){
+            isGrounded = true;
+            anim.SetBool(JUMP_ANIMATION, false);
+            player.transform.parent=collision.gameObject.transform;
         }
         if(collision.gameObject.CompareTag(ARROW_TAG)){
+            // resultScore.GetComponent<UnityEngine.UI.Text>().text  = points.ToString();
+            resultScore.SetActive(true);
+            LevelCompleteBG.SetActive(true);
+            showLevelComp();
+            resultText.SetActive(true);
+            // Exit.SetActive(true);
+            done = true;
             Destroy(gameObject);
         }
           
@@ -132,7 +187,25 @@ public class PlayerMove : MonoBehaviour
         // }
     }
 
+
+
+    private void OnCollisionExit2D(Collision2D collision){
+        
+        if(collision.gameObject.CompareTag("movingplatform") ){
+            player.transform.parent=null;
+        }
+          
+        // if(collision.gameObject.CompareTag(UPPLATFORM_TAG)){
+        //     Destroy(gameObject);
+        // }
+    }
+
     private bool toStart = false;
+    private bool toLvl1 = false;
+    private bool toLvl2 = false;
+    private bool toLevels = false;
+    
+    private bool toMainMenu = false;
 
     void StartGame(){
         
@@ -140,11 +213,46 @@ public class PlayerMove : MonoBehaviour
         {
             SceneManager.LoadScene("LevelOne");
             Debug.Log("Game Start!");
+            Sfxmanager.sfxInstance.Audio.PlayOneShot(Sfxmanager.sfxInstance.Click);
+        }
+        if (Input.GetKeyDown(KeyCode.Return) && toLvl1 == true)
+        {
+            SceneManager.LoadScene("LevelOne");
+            Debug.Log("Game Start!");
+             Sfxmanager.sfxInstance.Audio.PlayOneShot(Sfxmanager.sfxInstance.Click);
+        }
+        if (Input.GetKeyDown(KeyCode.Return) && toLvl2 == true)
+        {
+            SceneManager.LoadScene("LevelTwo");
+            Debug.Log("Game Start!");
+             Sfxmanager.sfxInstance.Audio.PlayOneShot(Sfxmanager.sfxInstance.Click);
+        }
+        if (Input.GetKeyDown(KeyCode.Return) && toLevels == true)
+        {
+            SceneManager.LoadScene("LevelSelection");
+            Debug.Log("Game Start!");
+             Sfxmanager.sfxInstance.Audio.PlayOneShot(Sfxmanager.sfxInstance.Click);
+        }if (Input.GetKeyDown(KeyCode.Return) && toMainMenu == true)
+        {
+            SceneManager.LoadScene("MainMenu");
+            Debug.Log("Game Start!");
+             Sfxmanager.sfxInstance.Audio.PlayOneShot(Sfxmanager.sfxInstance.Click);
+        }
+        if (Input.GetKeyDown(KeyCode.Return) && toCredits == true)
+        {
+            SceneManager.LoadScene("Credits");
+             Sfxmanager.sfxInstance.Audio.PlayOneShot(Sfxmanager.sfxInstance.Click);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision){
         if(collision.gameObject.CompareTag(FLOOD_TAG)){
+           resultScore.SetActive(true);
+            LevelCompleteBG.SetActive(true);
+            showLevelComp();
+            resultText.SetActive(true);
+            // Exit.SetActive(true);
+            done = true;
             Destroy(gameObject);
         }
         if(collision.gameObject.CompareTag(START_TAG)){
@@ -152,7 +260,31 @@ public class PlayerMove : MonoBehaviour
             toStart = true;
             Debug.Log("Start");
         }
+        if(collision.gameObject.CompareTag("level1")){
+            // Destroy(gameObject);
+            toLvl1 = true;
+            Debug.Log("Start");
+        }
+        if(collision.gameObject.CompareTag("level2")){
+            // Destroy(gameObject);
+            toLvl2 = true;
+            Debug.Log("Start");
+        }if(collision.gameObject.CompareTag("levels")){
+            // Destroy(gameObject);
+            toLevels = true;
+            Debug.Log("Start");
+        }if(collision.gameObject.CompareTag("back")){
+            // Destroy(gameObject);
+            toMainMenu = true;
+            Debug.Log("Start");
+        }if(collision.gameObject.CompareTag("credits")){
+            // Destroy(gameObject);
+            toCredits = true;
+            Debug.Log("Start");
+        }
     }
+
+    bool toCredits = false;
     private void OnTriggerExit2D(Collider2D collision){
         
         if(collision.gameObject.CompareTag(START_TAG)){
@@ -160,6 +292,28 @@ public class PlayerMove : MonoBehaviour
             toStart = false;
             Debug.Log("Can't Start");
         
+        }if(collision.gameObject.CompareTag("level1")){
+            // Destroy(gameObject);
+            toLvl1 = false;
+            Debug.Log("Can't Start");
+        }
+        if(collision.gameObject.CompareTag("level2")){
+            // Destroy(gameObject);
+            toLvl2 = false;
+            Debug.Log("Can't Start");
+        }
+        if(collision.gameObject.CompareTag("levels")){
+            // Destroy(gameObject);
+            toLevels = false;
+            Debug.Log("Can't Start");
+        }
+        if(collision.gameObject.CompareTag("back")){
+            toMainMenu = false;
+            Debug.Log("Can't Start");
+        }
+        if(collision.gameObject.CompareTag("credits")){
+            toCredits = false;
+            Debug.Log("Can't Start");
         }
     }
 

@@ -19,12 +19,22 @@ public class TrapSpawn : MonoBehaviour
     {
         StartCoroutine(SpawnTraps());
     }
-
+    bool pauseToggle = false;
+    void Update(){
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            pauseToggle = !pauseToggle;
+            if(!pauseToggle){
+            StartCoroutine(SpawnTraps());
+        }
+        }
+        
+    }
     IEnumerator SpawnTraps(){
+            
+        while(!pauseToggle){
 
-        while(true){
-
-            yield return new WaitForSeconds(Random.Range(3,5));
+            yield return new WaitForSeconds(Random.Range(5,5));
     
             randomIndex = Random.Range(0,trapReference.Length);
             randomSide = Random.Range(0,2);
@@ -33,7 +43,7 @@ public class TrapSpawn : MonoBehaviour
 
             if(randomSide == 0){
                 spawnedTrap.transform.position = leftPos.position;
-                spawnedTrap.GetComponent<Traps>().speed = Random.Range(4,10);
+                spawnedTrap.GetComponent<Traps>().speed = Random.Range(4,6);
             }else{
                 spawnedTrap.transform.position = rightPos.position;
                 spawnedTrap.GetComponent<Traps>().speed = -Random.Range(4,10);

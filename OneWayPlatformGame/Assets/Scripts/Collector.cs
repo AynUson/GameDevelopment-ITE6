@@ -11,5 +11,11 @@ public class Collector : MonoBehaviour
         }
     }
 
+    // private void OnCollisionEnter2D(Collider2D collision){
+    //     if(collision.CompareTag("ArrowTrap")){
+    //         Destroy(collision.gameObject);
+    //     }
+    // }
+
 
 }

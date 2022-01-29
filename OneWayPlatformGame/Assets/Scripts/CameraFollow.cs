@@ -29,10 +29,10 @@ public class CameraFollow : MonoBehaviour
     void LateUpdate()
     {   
 
-        if(player == null){
-            SceneManager.LoadScene("MainMenu");
-            return;
-        }
+        // if(player == null){
+        //     SceneManager.LoadScene("MainMenu");
+        //     return;
+        // }
             
 
         tempPos = transform.position;
